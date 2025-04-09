@@ -1,7 +1,19 @@
+using FranchiseVerse.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddControllersWithViews();
+
+// Регистрируем контекст БД 
+builder.Services.AddDbContext<AppDbContext>(options =>
+options.UseNpgsql(
+builder.Configuration.GetConnectionString("DefaultConnection"),
+o => o.MigrationsAssembly("FranchiseVerse") // имя проекта
+));
 
 var app = builder.Build();
 
