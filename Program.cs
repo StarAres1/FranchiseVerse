@@ -1,12 +1,33 @@
 using FranchiseVerse.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using FranchiseVerse.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+ {
+     options.TokenValidationParameters = new TokenValidationParameters
+     {
+         ValidateIssuer = true,
+         ValidateAudience = true,
+         ValidateLifetime = true,
+         ValidateIssuerSigningKey = true,
+         ValidIssuer = jwtSettings["Issuer"],
+         ValidAudience = jwtSettings["Audience"],
+         IssuerSigningKey = new SymmetricSecurityKey(key)
+     };
+ });
 
 // Регистрируем контекст БД 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -14,6 +35,12 @@ options.UseNpgsql(
 builder.Configuration.GetConnectionString("DefaultConnection"),
 o => o.MigrationsAssembly("FranchiseVerse") // имя проекта
 ));
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+// Регистрируем наш сервис авторизации
+builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();
 
@@ -25,12 +52,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

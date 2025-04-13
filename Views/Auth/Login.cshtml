@@ -1,0 +1,14 @@
+﻿@model FranchiseVerse.Models.LoginDto
+
+<h2>Login</h2>
+<form asp-action="Login" method="post">
+    <div>
+        <label asp-for="UserName">Username:</label>
+        <input asp-for="UserName" />
+    </div>
+    <div>
+        <label asp-for="Password">Password:</label>
+        <input type="password" asp-for="Password" />
+    </div>
+    <button type="submit">Login</button>
+</form>
