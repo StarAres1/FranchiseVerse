@@ -24,22 +24,28 @@ namespace FranchiseVerse.Controllers
             if (await _context.user.AnyAsync(u => u.UserName == model.UserName))
                 return BadRequest("Username already exists.");
 
+            if (await _context.user.AnyAsync(u => u.Email == model.Email))
+                return BadRequest("Email already exists.");
+
+            var hashedPassword = _authService.HashPassword(model.Password);
+
             var user = new User
             {
                 UserName = model.UserName,
                 Name = model.Name,
                 Surename = model.Surename,
                 Email = model.Email,
-                PasswordHash = model.Password
+                PasswordHash = hashedPassword
             };
 
             _context.user.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "User registered successfully." });
+            // Перенаправляем пользователя на главную страницу
+            return RedirectToAction("Index", "Home"); // метод , название контроллера
         }
 
-        [HttpGet("Auth/Register")]
+        [HttpGet]
         public IActionResult Register()
         {
             return View(); // Возвращает представление Register.cshtml
@@ -53,12 +59,32 @@ namespace FranchiseVerse.Controllers
                 return Unauthorized("Invalid username or password.");
 
             var token = _authService.GenerateJwtToken(user);
-            return Ok(new { Token = token });
+            // Сохраняем токен в куки
+            Response.Cookies.Append("jwtToken", token, new CookieOptions
+            {
+                HttpOnly = true, // Защита от доступа через JavaScript
+                Secure = true,   // Токен передается только по HTTPS
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddHours(1) // Время действия токена
+            });
+
+            // Перенаправляем на главную страницу
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Login()
         {
             return View(); // Возвращает представление Login.cshtml
+        }
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            // Удаляем куки или токен сессии, если они используются
+            Response.Cookies.Delete("jwtToken");
+
+            // Перенаправляем пользователя на главную страницу
+            return RedirectToAction("Index", "Home"); // метод , название контроллера
         }
     }
 

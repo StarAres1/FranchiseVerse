@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BCrypt.Net;
 
 namespace FranchiseVerse.Services
 {
@@ -38,10 +39,14 @@ namespace FranchiseVerse.Services
             return tokenHandler.WriteToken(token);
         }
 
+        public string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
         public bool VerifyPassword(string password, string passwordHash)
         {
-            // Здесь можно использовать BCrypt или другой алгоритм хэширования
-            return password == passwordHash; // Простая проверка для примера
+            return BCrypt.Net.BCrypt.Verify(password, passwordHash);
         }
     }
 }
