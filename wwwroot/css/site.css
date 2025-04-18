@@ -1,22 +1,152 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+﻿/* Общие стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  margin-bottom: 60px;
+    font-family: 'Roboto', sans-serif; /* Используем Google Fonts */
+    background-color: #121212; /* Темный фон */
+    color: #ffffff; /* Белый текст */
+    line-height: 1.6;
+    padding: 0;
+    margin: 0;
 }
+
+/* Задний фон с кинообоями */
+body {
+    background-image: url('/images/wallpaper.png'); /* Укажите путь к вашему изображению */
+    background-size: cover; /* Растягиваем изображение на весь экран */
+    background-position: center; /* Центрируем изображение */
+    background-repeat: no-repeat; /* Запрещаем повторение изображения */
+    background-attachment: fixed; /* Фиксируем фон */
+}
+
+/* Шапка сайта */
+header {
+    background-color: rgba(0, 0, 0, 0.7); /* Полупрозрачный черный фон */
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Тень для шапки */
+}
+
+    header h1 {
+        font-family: 'Pacifico', cursive; /* Интересный шрифт */
+        font-size: 2.5rem;
+        color: #ffdd57; /* Золотистый цвет текста */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Тень текста */
+    }
+
+/* Навигация */
+nav {
+    background-color: rgba(0, 0, 0, 0.8); /* Полупрозрачный черный фон */
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+    nav a {
+        color: #ffffff; /* Белый цвет ссылок */
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: color 0.3s ease; /* Плавное изменение цвета */
+    }
+
+        nav a:hover {
+            color: #ffdd57; /* Золотистый цвет при наведении */
+            text-decoration: underline;
+            text-decoration-color: #ffdd57; /* Подчеркивание золотистым цветом */
+        }
+
+/* Основной контент */
+main {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7); /* Полупрозрачный фон для контента */
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 1200px; /* Максимальная ширина контента */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Тень для контента */
+}
+
+/* Стили для заголовков */
+h2, h3 {
+    color: #ffdd57; /* Золотистый цвет заголовков */
+    font-family: 'Pacifico', cursive; /* Интересный шрифт */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Тень текста */
+}
+
+/* Стили для текста */
+p {
+    font-size: 1rem;
+    color: #d3d3d3; /* Светло-серый текст */
+}
+
+/* Стили для кнопок */
+button, .btn {
+    background-color: #ffdd57; /* Золотистый фон */
+    color: #121212; /* Черный текст */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.3s ease; /* Плавное увеличение при наведении */
+}
+
+    button:hover, .btn:hover {
+        transform: scale(1.05); /* Увеличиваем кнопку при наведении */
+    }
+
+/* Футер */
+footer {
+    background-color: rgba(0, 0, 0, 0.8); /* Полупрозрачный черный фон */
+    padding: 20px;
+    text-align: center;
+    color: #d3d3d3; /* Светло-серый текст */
+    margin-top: 20px;
+}
+
+    footer a {
+        color: #ffdd57; /* Золотистый цвет ссылок */
+        text-decoration: none;
+        transition: color 0.3s ease; /* Плавное изменение цвета */
+    }
+
+        footer a:hover {
+            color: #ffffff; /* Белый цвет при наведении */
+        }
+
+/* Стили для навигации */
+.navbar-nav {
+    display: flex;
+    flex-direction: row; /* Элементы в строку */
+    gap: 15px; /* Расстояние между элементами */
+}
+
+    .navbar-nav .nav-item {
+        margin: 0; /* Убираем лишние отступы */
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.5rem 1rem; /* Добавляем внутренние отступы */
+        transition: color 0.3s ease; /* Плавное изменение цвета */
+    }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffdd57; /* Золотистый цвет при наведении */
+        }
+
+/* Стили для логотипа */
+.navbar-brand.logo {
+    font-family: 'Pacifico', cursive; /* Используем красивый шрифт */
+    font-size: 2.5rem; /* Увеличиваем размер шрифта */
+    color: #ffdd57; /* Золотистый цвет текста */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Добавляем тень для текста */
+}
+
+    .navbar-brand.logo:hover {
+        color: #ffffff; /* Белый цвет при наведении */
+        text-decoration: none; /* Убираем подчеркивание */
+    }

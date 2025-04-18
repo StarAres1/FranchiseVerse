@@ -1,0 +1,86 @@
+﻿/* Общие стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif; /* Используем Google Fonts */
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.tile {
+    flex: 1 1 calc(25% - 20px); /* Четыре плитки в ряд */
+    min-height: 300px; /* Увеличили высоту плиток */
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px; /* Скругленные углы */
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
+}
+
+    .tile:hover {
+        transform: scale(1.05);
+    }
+
+.tile-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    text-decoration: none; /* Убираем подчеркивание */
+    color: white; /* Цвет текста белый */
+    background-color: rgba(0, 0, 0, 0.7); /* Полупрозрачный фон */
+    height: 100%;
+    padding: 30px;
+    border-radius: 15px;
+}
+
+    /* Убираем изменение цвета текста при наведении */
+    .tile-link:hover,
+    .tile-link:focus {
+        color: white; /* Цвет текста остается белым */
+        text-decoration: none; /* Убираем подчеркивание */
+    }
+
+.tile h2 {
+    font-family: 'Pacifico', cursive; /* Интересный шрифт */
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Тень текста */
+}
+
+.tile p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .tile {
+        flex: 1 1 calc(33.33% - 20px); /* Три плитки в ряд */
+    }
+}
+
+@media (max-width: 992px) {
+    .tile {
+        flex: 1 1 calc(50% - 20px); /* Две плитки в ряд */
+    }
+}
+
+@media (max-width: 768px) {
+    .tile {
+        flex: 1 1 100%; /* Одна плитка в ряд */
+    }
+}
