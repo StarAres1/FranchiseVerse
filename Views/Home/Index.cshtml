@@ -2,7 +2,31 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Здесь пока ничего нет, но скоро мы добавим сюда что-нибудь классное</p>
+<link rel="stylesheet" href="~/css/home_page.css" asp-append-version="true" />
+
+<div class="container">
+    <div class="tile" style="background-image: url('/images/games.jpg');">
+        <a asp-controller="#" asp-action="#" class="tile-link">
+            <h2>Игры</h2>
+            <p>Здесь вы найдете обзоры и рейтинги популярных игр.</p>
+        </a>
+    </div>
+    <div class="tile" style="background-image: url('/images/movies.png');">
+        <a asp-controller="#" asp-action="#" class="tile-link">
+            <h2>Фильмы</h2>
+            <p>Лучшие фильмы разных жанров и годов выпуска.</p>
+        </a>
+    </div>
+    <div class="tile" style="background-image: url('/images/tvseries.png');">
+        <a asp-controller="#" asp-action="#" class="tile-link">
+            <h2>Сериалы</h2>
+            <p>Рекомендации по сериалам со всего мира.</p>
+        </a>
+    </div>
+    <div class="tile" style="background-image: url('/images/books.jpg');">
+        <a asp-controller="#" asp-action="#" class="tile-link">
+            <h2>Книги</h2>
+            <p>Обзоры книг и списки для чтения.</p>
+        </a>
+    </div>
 </div>
