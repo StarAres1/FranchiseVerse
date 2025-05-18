@@ -3,6 +3,7 @@ using System;
 using FranchiseVerse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FranchiseVerse.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250518091859_GameModelUpdate")]
+    partial class GameModelUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,59 +46,9 @@ namespace FranchiseVerse.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Age")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
                     b.HasKey("Id");
 
                     b.ToTable("character");
-                });
-
-            modelBuilder.Entity("FranchiseVerse.Models.CharacterPerson", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CharacterId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("GameId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PersonId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("RoleType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CharacterId");
-
-                    b.HasIndex("GameId");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("characterPerson");
                 });
 
             modelBuilder.Entity("FranchiseVerse.Models.Franchise", b =>
@@ -177,34 +130,6 @@ namespace FranchiseVerse.Migrations
                     b.ToTable("game");
                 });
 
-            modelBuilder.Entity("FranchiseVerse.Models.GamePerson", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("GameId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PersonId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("RoleType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("gamePerson");
-                });
-
             modelBuilder.Entity("FranchiseVerse.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
@@ -271,46 +196,6 @@ namespace FranchiseVerse.Migrations
                     b.ToTable("movie");
                 });
 
-            modelBuilder.Entity("FranchiseVerse.Models.Person", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Bio")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Nationality")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("PhotoUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Profession")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("person");
-                });
-
             modelBuilder.Entity("FranchiseVerse.Models.TVseries", b =>
                 {
                     b.Property<int>("Id")
@@ -361,71 +246,6 @@ namespace FranchiseVerse.Migrations
                         .IsUnique();
 
                     b.ToTable("user");
-                });
-
-            modelBuilder.Entity("FranchiseVerse.Models.CharacterPerson", b =>
-                {
-                    b.HasOne("FranchiseVerse.Models.Character", "Character")
-                        .WithMany("CharacterPersons")
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FranchiseVerse.Models.Game", "Game")
-                        .WithMany("CharacterPersons")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FranchiseVerse.Models.Person", "Person")
-                        .WithMany("CharacterPersons")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Character");
-
-                    b.Navigation("Game");
-
-                    b.Navigation("Person");
-                });
-
-            modelBuilder.Entity("FranchiseVerse.Models.GamePerson", b =>
-                {
-                    b.HasOne("FranchiseVerse.Models.Game", "Game")
-                        .WithMany("GamePersons")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FranchiseVerse.Models.Person", "Person")
-                        .WithMany("GamePersons")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-
-                    b.Navigation("Person");
-                });
-
-            modelBuilder.Entity("FranchiseVerse.Models.Character", b =>
-                {
-                    b.Navigation("CharacterPersons");
-                });
-
-            modelBuilder.Entity("FranchiseVerse.Models.Game", b =>
-                {
-                    b.Navigation("CharacterPersons");
-
-                    b.Navigation("GamePersons");
-                });
-
-            modelBuilder.Entity("FranchiseVerse.Models.Person", b =>
-                {
-                    b.Navigation("CharacterPersons");
-
-                    b.Navigation("GamePersons");
                 });
 #pragma warning restore 612, 618
         }

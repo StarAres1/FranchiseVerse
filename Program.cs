@@ -27,8 +27,7 @@ builder.Services.AddAuthentication(option =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]))
     };
-
-    // Чтение токена из куки
+    
     options.Events = new JwtBearerEvents
     {
         OnMessageReceived = context =>
@@ -43,17 +42,16 @@ builder.Services.AddAuthentication(option =>
     };
 });
 
-// Регистрируем контекст БД 
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseNpgsql(
 builder.Configuration.GetConnectionString("DefaultConnection"),
-o => o.MigrationsAssembly("FranchiseVerse") // имя проекта
+o => o.MigrationsAssembly("FranchiseVerse") // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Регистрируем наш сервис авторизации
 builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();

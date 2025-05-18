@@ -3,6 +3,7 @@ using System;
 using FranchiseVerse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FranchiseVerse.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250518110730_DependenciesForGameAdded")]
+    partial class DependenciesForGameAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,16 +70,10 @@ namespace FranchiseVerse.Migrations
 
             modelBuilder.Entity("FranchiseVerse.Models.CharacterPerson", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("GameId")
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CharacterId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("GameId")
                         .HasColumnType("integer");
 
                     b.Property<int>("PersonId")
@@ -87,11 +84,9 @@ namespace FranchiseVerse.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("GameId", "CharacterId", "PersonId");
 
                     b.HasIndex("CharacterId");
-
-                    b.HasIndex("GameId");
 
                     b.HasIndex("PersonId");
 
@@ -179,12 +174,6 @@ namespace FranchiseVerse.Migrations
 
             modelBuilder.Entity("FranchiseVerse.Models.GamePerson", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
                     b.Property<int>("GameId")
                         .HasColumnType("integer");
 
@@ -196,9 +185,7 @@ namespace FranchiseVerse.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
+                    b.HasKey("GameId", "PersonId");
 
                     b.HasIndex("PersonId");
 

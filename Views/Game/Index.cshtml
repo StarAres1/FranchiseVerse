@@ -1,0 +1,101 @@
+﻿@model IEnumerable<FranchiseVerse.Models.Game>
+
+@{
+    ViewData["Title"] = "Список игр";
+}
+
+<link rel="stylesheet" href="~/css/movie_page.css" asp-append-version="true" />
+
+<h2>Список игр</h2>
+
+<div class="movie-list">
+    @foreach (var game in Model)
+    {
+        <div class="movie-tile">
+            <a asp-action="GamePage" asp-route-id="@game.Id" class="movie-link">
+                <div class="movie-tile__wrapper">
+                    <div class="movie-poster">
+                        <img src="@game.PosterUrl" alt="Постер фильма @game.Title" />
+                    </div>
+                    <div class="movie-info">
+                        <h3 class="movie-title">@game.Title</h3>
+                        <p class="movie-description">
+                            @(game.Description?.Length > 100 ? game.Description.Substring(0, 100) + "..." : game.Description)
+                        </p>
+                        <div class="movie-details">
+                            <span class="movie-detail">Рейтинг Кинопоиска: @game.Rating</span>
+                            <span class="movie-detail">Жанр: @game.Genre</span>
+                            <span class="movie-detail">Год выхода: @(game.ReleaseDate?.Year)</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+
+<div class="pagination">
+    @if (ViewBag.TotalPages > 1)
+    {
+        int currentPage = ViewBag.Page;
+        int totalPages = ViewBag.TotalPages;
+        int maxButtons = 20; // Максимальное количество кнопок
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @if (totalPages <= maxButtons)
+                {
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i">@i</a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    int startPage = Math.Max(1, currentPage - (maxButtons / 2));
+                    int endPage = Math.Min(totalPages, startPage + maxButtons - 1);
+
+                    // Корректировка диапазона, если он выходит за границы
+                    if (endPage - startPage + 1 < maxButtons)
+                    {
+                        startPage = Math.Max(1, endPage - maxButtons + 1);
+                    }
+
+                    // Первые страницы
+                    if (startPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">1</a>
+                        </li>
+                        if (startPage > 2)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+                    }
+
+                    // Текущая область
+                    for (int i = startPage; i <= endPage; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i">@i</a>
+                        </li>
+                    }
+
+                    // Последние страницы
+                    if (endPage < totalPages)
+                    {
+                        if (endPage < totalPages - 1)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+                        <li class="page-item">
+                            <a class="page-link" href="?page=@totalPages">@totalPages</a>
+                        </li>
+                    }
+                }
+            </ul>
+        </nav>
+    }
+</div>

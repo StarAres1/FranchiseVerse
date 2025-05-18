@@ -18,5 +18,39 @@ namespace FranchiseVerse.Data
         public DbSet<TVseries> tvseries { get; set; }
         public DbSet<User> user { get; set; }
         public DbSet<Character> character { get; set; }
+        public DbSet<Person> person { get; set; }
+        
+        public DbSet<CharacterPerson> characterPerson { get; set; }
+        public DbSet<GamePerson> gamePerson { get; set; }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CharacterPerson>()
+                .HasOne(cp => cp.Game)
+                .WithMany(g => g.CharacterPersons)
+                .HasForeignKey(cp => cp.GameId);
+
+            modelBuilder.Entity<CharacterPerson>()
+                .HasOne(cp => cp.Character)
+                .WithMany(c => c.CharacterPersons)
+                .HasForeignKey(cp => cp.CharacterId);
+
+            modelBuilder.Entity<CharacterPerson>()
+                .HasOne(cp => cp.Person)
+                .WithMany(p => p.CharacterPersons)
+                .HasForeignKey(cp => cp.PersonId);
+
+            // GamePerson
+            modelBuilder.Entity<GamePerson>()
+                .HasOne(gp => gp.Game)
+                .WithMany(g => g.GamePersons)
+                .HasForeignKey(gp => gp.GameId);
+
+            modelBuilder.Entity<GamePerson>()
+                .HasOne(gp => gp.Person)
+                .WithMany(p => p.GamePersons)
+                .HasForeignKey(gp => gp.PersonId);
+        }
     }
+    
 }
