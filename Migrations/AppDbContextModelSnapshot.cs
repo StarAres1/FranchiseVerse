@@ -255,6 +255,9 @@ namespace FranchiseVerse.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("RateCount")
+                        .HasColumnType("integer");
+
                     b.Property<double?>("Rating")
                         .HasColumnType("double precision");
 
@@ -271,6 +274,34 @@ namespace FranchiseVerse.Migrations
                     b.ToTable("movie");
                 });
 
+            modelBuilder.Entity("FranchiseVerse.Models.Rate", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("MovieId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("MovieId1")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Rating")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId1");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("rate");
+                    
             modelBuilder.Entity("FranchiseVerse.Models.Person", b =>
                 {
                     b.Property<int>("Id")
@@ -383,6 +414,24 @@ namespace FranchiseVerse.Migrations
 
                     b.ToTable("user");
                 });
+
+            modelBuilder.Entity("FranchiseVerse.Models.Rate", b =>
+                {
+                    b.HasOne("FranchiseVerse.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FranchiseVerse.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
 
             modelBuilder.Entity("FranchiseVerse.Models.CharacterPerson", b =>
                 {

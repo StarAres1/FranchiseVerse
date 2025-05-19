@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using FranchiseVerse.Models;
 
 
@@ -18,6 +18,8 @@ namespace FranchiseVerse.Data
         public DbSet<TVseries> tvseries { get; set; }
         public DbSet<User> user { get; set; }
         public DbSet<Character> character { get; set; }
+
+        public DbSet<Rate> rate { get; set; }
         public DbSet<Person> person { get; set; }
         
         public DbSet<CharacterPerson> characterPerson { get; set; }

@@ -150,3 +150,29 @@ footer {
         color: #ffffff; /* Белый цвет при наведении */
         text-decoration: none; /* Убираем подчеркивание */
     }
+
+.rating-stars {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+}
+
+.star-button {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .star-button:hover {
+        background-color: #ffd700;
+        border-color: #ffd700;
+        transform: scale(1.1);
+    }
+
+    .star-button.active {
+        background-color: #ffc107;
+        border-color: #ffc107;
+        font-weight: bold;
+    }

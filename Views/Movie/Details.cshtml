@@ -1,0 +1,92 @@
+﻿@model FranchiseVerse.Models.Movie
+@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<link rel="stylesheet" href="~/css/movie_page.css" asp-append-version="true" />
+
+<div class="movie-details-container">
+    <div class="movie-poster">
+        <img src="@Model.PosterUrl" alt="Постер @Model.Title" />
+    </div>
+    <div class="movie-info">
+        <h1>@Model.Title</h1>
+        <p class="movie-full-description">@Model.Description</p>
+        <div class="movie-meta">
+            <p>Рейтинг Кинопоиска: @Model.Rating</p>
+            <p>Жанр: @Model.Genre</p>
+            <p>Год выхода: @(Model.ReleaseDate?.Year)</p>
+        </div>
+    </div>
+</div>
+
+<!-- Система оценок -->
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="rating-section">
+        <h4>Оцените фильм:</h4>
+        <div class="rating-stars">
+            @for (int i = 1; i <= 10; i++)
+            {
+                <button 
+                    type="button" 
+                    class="star-button" 
+                    data-rating="@i"
+                    title="Оценка @i"
+                    aria-label="Оценка @i"
+                >
+                    @i ⭐
+                </button>
+            }
+        </div>
+        <p id="rating-message" class="text-success mt-2"></p>
+    </div>
+}
+else
+{
+    <p class="text-muted">Авторизуйтесь, чтобы оставить оценку.</p>
+}
+
+<a asp-action="Index" class="back-link">Назад к списку фильмов</a>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.star-button');
+            const movieId = @Model.Id;
+            const message = document.getElementById('rating-message');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const rating = button.dataset.rating;
+
+                    // Удаляем активный класс у всех кнопок
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    // Добавляем активный класс к выбранной кнопке
+                    button.classList.add('active');
+
+                    try {
+                        const response = await fetch(`/Movies/Rate/${movieId}?rating=${rating}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'XSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
+                            }
+                        });
+
+                        if (!response.ok) throw new Error('Ошибка сети');
+
+                        const result = await response.json();
+                        message.textContent = result.message;
+                        message.className = 'text-success mt-2';
+                    } catch (error) {
+                        console.error('Ошибка:', error);
+                        message.textContent = 'Не удалось сохранить оценку.';
+                        message.className = 'text-danger mt-2';
+                    }
+                });
+            });
+        });
+    </script>
+}
