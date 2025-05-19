@@ -15,15 +15,21 @@ namespace FranchiseVerse.Controllers
             _context = context;
         }
         [HttpGet]
-        public IActionResult Index(int page = 1)
+        public IActionResult Index(string genre = null, int page = 1)
         {
             int pageSize = 10;
+            IQueryable<Game> query;
 
-            var query = _context.game.AsQueryable();
-
-            /*
-             * Здесь потом будут фильтры
-             */
+            if (!string.IsNullOrEmpty(genre))
+            {
+                // Вызов функции PostgreSQL через EF Core
+                query = _context.GetGamesByGenre(genre);
+            }
+            else
+            {
+                // Если жанр не выбран, показываем все игры
+                query = _context.game;
+            }
 
             int totalRecords = query.Count();
 
@@ -36,6 +42,7 @@ namespace FranchiseVerse.Controllers
             ViewBag.Page = page;
             ViewBag.PageSize = pageSize;
             ViewBag.TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+            ViewBag.SelectedGenre = genre;
 
 
             return View(games);

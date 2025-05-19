@@ -8,6 +8,23 @@
 
 <h2>Список игр</h2>
 
+<!-- Форма для выбора жанра -->
+<form method="get" class="genre-filter">
+    <label for="genre">Выберите жанр:</label>
+    <select id="genre" name="genre" onchange="this.form.submit()">
+        <option value="">Все жанры</option>
+        <option value="Вестерн" selected="@(ViewBag.SelectedGenre == "Вестерн")">Вестерн</option>
+        <option value="Приключения" selected="@(ViewBag.SelectedGenre == "Приключения")">Приключения</option>
+        <option value="RPG" selected="@(ViewBag.SelectedGenre == "RPG")">RPG</option>
+        <option value="Экшн" selected="@(ViewBag.SelectedGenre == "Экшн")">Экшн</option>
+        <option value="Симулятор" selected="@(ViewBag.SelectedGenre == "Симулятор")">Симулятор</option>
+        <option value="Платформер" selected="@(ViewBag.SelectedGenre == "Платформер")">Платформер</option>
+        <option value="Приключения" selected="@(ViewBag.SelectedGenre == "Приключения")">Приключения</option>
+        <option value="Шутер" selected="@(ViewBag.SelectedGenre == "Шутер")">Шутер</option>
+        <!-- Добавьте другие жанры по необходимости -->
+    </select>
+</form>
+
 <div class="movie-list">
     @foreach (var game in Model)
     {
@@ -15,7 +32,7 @@
             <a asp-action="GamePage" asp-route-id="@game.Id" class="movie-link">
                 <div class="movie-tile__wrapper">
                     <div class="movie-poster">
-                        <img src="@game.PosterUrl" alt="Постер фильма @game.Title" />
+                        <img src="@game.PosterUrl" alt="Постер игры @game.Title" />
                     </div>
                     <div class="movie-info">
                         <h3 class="movie-title">@game.Title</h3>
@@ -23,7 +40,7 @@
                             @(game.Description?.Length > 100 ? game.Description.Substring(0, 100) + "..." : game.Description)
                         </p>
                         <div class="movie-details">
-                            <span class="movie-detail">Рейтинг Кинопоиска: @game.Rating</span>
+                            <span class="movie-detail">Рейтинг: @game.Rating</span>
                             <span class="movie-detail">Жанр: @game.Genre</span>
                             <span class="movie-detail">Год выхода: @(game.ReleaseDate?.Year)</span>
                         </div>
@@ -48,7 +65,7 @@
                     @for (int i = 1; i <= totalPages; i++)
                     {
                         <li class="page-item @(i == currentPage ? "active" : "")">
-                            <a class="page-link" href="?page=@i">@i</a>
+                            <a class="page-link" href="?genre=@ViewBag.SelectedGenre&page=@i">@i</a>
                         </li>
                     }
                 }
@@ -67,7 +84,7 @@
                     if (startPage > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" href="?page=1">1</a>
+                            <a class="page-link" href="?genre=@ViewBag.SelectedGenre&page=1">1</a>
                         </li>
                         if (startPage > 2)
                         {
@@ -79,7 +96,7 @@
                     for (int i = startPage; i <= endPage; i++)
                     {
                         <li class="page-item @(i == currentPage ? "active" : "")">
-                            <a class="page-link" href="?page=@i">@i</a>
+                            <a class="page-link" href="?genre=@ViewBag.SelectedGenre&page=@i">@i</a>
                         </li>
                     }
 
@@ -91,7 +108,7 @@
                             <li class="page-item disabled"><span class="page-link">...</span></li>
                         }
                         <li class="page-item">
-                            <a class="page-link" href="?page=@totalPages">@totalPages</a>
+                            <a class="page-link" href="?genre=@ViewBag.SelectedGenre&page=@totalPages">@totalPages</a>
                         </li>
                     }
                 }

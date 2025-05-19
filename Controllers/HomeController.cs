@@ -1,21 +1,27 @@
 using System.Diagnostics;
 using FranchiseVerse.Models;
 using Microsoft.AspNetCore.Mvc;
+using FranchiseVerse.Data;
 
 namespace FranchiseVerse.Controllers
 {
+    
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly AppDbContext _context;
+        
+        public HomeController(AppDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
-
+        
         public IActionResult Index()
         {
-            return View();
+            var randomGames = _context.RandomGames.AsEnumerable();
+            var randomMovies = _context.RandomMovies.AsEnumerable();
+
+            // Передаем оба списка в представление через кортеж
+            return View((randomGames, randomMovies));
         }
 
         public IActionResult Privacy()
