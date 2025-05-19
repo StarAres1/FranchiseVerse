@@ -1,32 +1,66 @@
-﻿@{
+﻿@model (IEnumerable<FranchiseVerse.Models.RandomGames> RandomGames, IEnumerable<FranchiseVerse.Models.RandomMovies> RandomMovies)
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <link rel="stylesheet" href="~/css/home_page.css" asp-append-version="true" />
-
+<h1>Разделы</h1>
 <div class="container">
-    <div class="tile" style="background-image: url('/images/games.jpg');">
-        <a asp-controller="#" asp-action="#" class="tile-link">
+    <div class="tile" style="background-image: url('./images/games.jpg');">
+        <a asp-controller="Game" asp-action="Index" class="tile-link">
             <h2>Игры</h2>
             <p>Здесь вы найдете обзоры и рейтинги популярных игр.</p>
         </a>
     </div>
-    <div class="tile" style="background-image: url('/images/movies.png');">
+    <div class="tile" style="background-image: url('./images/movies.png');">
         <a asp-controller="Movie" asp-action="Index" class="tile-link">
             <h2>Фильмы</h2>
             <p>Лучшие фильмы разных жанров и годов выпуска.</p>
         </a>
     </div>
-    <div class="tile" style="background-image: url('/images/tvseries.png');">
+    <div class="tile" style="background-image: url('./images/tvseries.png');">
         <a asp-controller="#" asp-action="#" class="tile-link">
             <h2>Сериалы</h2>
             <p>Рекомендации по сериалам со всего мира.</p>
         </a>
     </div>
-    <div class="tile" style="background-image: url('/images/books.jpg');">
+    <div class="tile" style="background-image: url('./images/books.jpg');">
         <a asp-controller="#" asp-action="#" class="tile-link">
             <h2>Книги</h2>
             <p>Обзоры книг и списки для чтения.</p>
         </a>
     </div>
+</div>
+
+<br>
+<br>
+
+<h1>Подборка игр специально для вас!</h1>
+<div class="container">
+    @foreach (var game in Model.RandomGames)
+    {
+        <div class="tile" style="background-image: url('@game.PosterUrl');">
+            <a asp-controller="Game" asp-action="GamePage" asp-route-id="@game.Id" class="tile-link">
+                <h2>@game.Title</h2>
+                <p>Рейтинг: @game.Rating</p>
+            </a>
+        </div>
+    }
+</div>
+
+<br>
+<br>
+
+<h1>Подборка фильмов специально для вас!</h1>
+<div class="container">
+    @foreach (var movie in Model.RandomMovies)
+    {
+        <div class="tile" style="background-image: url('@movie.PosterUrl');">
+            <a asp-controller="#" asp-action="#" asp-route-id="@movie.Id" class="tile-link">
+                <h2>@movie.Title</h2>
+                <p>Рейтинг: @movie.Rating</p>
+            </a>
+        </div>
+    }
 </div>

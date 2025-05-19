@@ -1,0 +1,106 @@
+﻿@model FranchiseVerse.Models.Game
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<link rel="stylesheet" href="~/css/game_page.css" asp-append-version="true" />
+
+<!-- Заголовок и постер -->
+<div class="game-header">
+    <h1 class="game-title">@Model.Title</h1>
+    <div class="poster-container">
+        <img src="@Model.PosterUrl" alt="Постер @Model.Title" class="game-poster" />
+    </div>
+</div>
+
+<!-- Информация об игре -->
+<div class="game-info">
+    <p><strong>Описание:</strong> @Model.Description</p>
+    <p><strong>Год выпуска:</strong> @Model.ReleaseDate?.Year</p>
+    <p><strong>Жанр:</strong> @Model.Genre</p>
+    <p><strong>Рейтинг:</strong> @Model.Rating</p>
+    <p><strong>Бюджет:</strong> $@Model.Budget?.ToString("N0")</p>
+    <p><strong>Кассовые сборы:</strong> $@Model.BoxOffice?.ToString("N0")</p>
+    <p><strong>Страна:</strong> @Model.Country</p>
+    <p><strong>Язык:</strong> @Model.Language</p>
+    <p><strong>Возрастное ограничение:</strong> @Model.AgeRating</p>
+</div>
+
+<!-- Персонажи -->
+<h2>Персонажи</h2>
+<div class="characters-list">
+    @if (Model.CharacterPersons != null && Model.CharacterPersons.Any())
+    {
+        var groupedCharacters = Model.CharacterPersons.GroupBy(cp => cp.Character);
+
+        foreach (var group in groupedCharacters)
+        {
+            var character = group.First().Character;
+
+            <div class="character-row">
+                <!-- Изображение персонажа -->
+                <div class="character-image">
+                    <img src="@character.ImageUrl" alt="@character.Name" />
+                </div>
+                <!-- Имя персонажа -->
+                <div class="character-name">
+                    <strong>@character.Name</strong>
+                </div>
+
+                <!-- Актёр -->
+                @{
+                    var actor = group.FirstOrDefault(cp => cp.RoleType == "Actor");
+                    var voiceActor = group.FirstOrDefault(cp => cp.RoleType == "VoiceActor");
+                }
+
+                <!-- Актёр -->
+                <div class="person-card">
+                    @if (actor != null && actor.Person != null)
+                    {
+                        <img src="@actor.Person.PhotoUrl" alt="@actor.Person.Name" />
+                        <span>@actor.Person.Name</span>
+                    }
+                </div>
+
+                <!-- Актёр дубляжа -->
+                <div class="person-card">
+                    @if (voiceActor != null && voiceActor.Person != null)
+                    {
+                        <img src="@voiceActor.Person.PhotoUrl" alt="@voiceActor.Person.Name" />
+                        <span>@voiceActor.Person.Name</span>
+                    }
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Нет персонажей.</p>
+    }
+</div>
+
+<!-- Участники проекта -->
+<h2>Участники проекта</h2>
+<div class="people-list">
+    @if (Model.GamePersons != null && Model.GamePersons.Any())
+    {
+        foreach (var gp in Model.GamePersons)
+        {
+            if (gp.Person != null)
+            {
+                <div class="person-item">
+                    <img src="@gp.Person.PhotoUrl" alt="@gp.Person.Name" />
+                    <div class="person-info">
+                        <div>@gp.Person.Name</div>
+                        <div class="role">@gp.RoleType</div>
+                    </div>
+                </div>
+            }
+        }
+    }
+    else
+    {
+        <p>Нет данных о людях, участвовавших в создании игры.</p>
+    }
+</div>

@@ -3,6 +3,7 @@ using System;
 using FranchiseVerse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FranchiseVerse.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250519144527_GenreFunctionAdded")]
+    partial class GenreFunctionAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,9 +258,6 @@ namespace FranchiseVerse.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("RateCount")
-                        .HasColumnType("integer");
-
                     b.Property<double?>("Rating")
                         .HasColumnType("double precision");
 
@@ -274,34 +274,6 @@ namespace FranchiseVerse.Migrations
                     b.ToTable("movie");
                 });
 
-            modelBuilder.Entity("FranchiseVerse.Models.Rate", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("MovieId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("MovieId1")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Rating")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MovieId1");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("rate");
-                    
             modelBuilder.Entity("FranchiseVerse.Models.Person", b =>
                 {
                     b.Property<int>("Id")
@@ -414,24 +386,6 @@ namespace FranchiseVerse.Migrations
 
                     b.ToTable("user");
                 });
-
-            modelBuilder.Entity("FranchiseVerse.Models.Rate", b =>
-                {
-                    b.HasOne("FranchiseVerse.Models.Movie", "Movie")
-                        .WithMany()
-                        .HasForeignKey("MovieId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FranchiseVerse.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Movie");
-
-                    b.Navigation("User");
 
             modelBuilder.Entity("FranchiseVerse.Models.CharacterPerson", b =>
                 {
