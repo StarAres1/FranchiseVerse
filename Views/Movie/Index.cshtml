@@ -12,7 +12,7 @@
     @foreach (var movie in Model)
     {
         <div class="movie-tile">
-            <a href="#" class="movie-link">
+            <a asp-action="Details" asp-route-id="@movie.Id" class="movie-link">
                 <div class="movie-tile__wrapper">
                     <div class="movie-poster">
                         <img src="@movie.PosterUrl" alt="Постер фильма @movie.Title" />

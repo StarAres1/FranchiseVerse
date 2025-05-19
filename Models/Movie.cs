@@ -39,6 +39,10 @@ namespace FranchiseVerse.Models
         [Range(0, 10, ErrorMessage = "Рейтинг должен быть от 0 до 10.")]
         public double? Rating { get; set; }
 
+        //количество оценок
+        [Range(0, int.MaxValue, ErrorMessage = "Количство оценок должно быть положительным числом.")]
+        public int RateCount { get; set;}
+
         // Постер фильма (URL изображения)
         [Url(ErrorMessage = "Введите корректный URL для постера.")]
         [Display(Name = "Постер")]
