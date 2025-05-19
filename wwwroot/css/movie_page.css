@@ -126,3 +126,19 @@ body {
     background-color: #222;
     color: #666;
 }
+
+.genre-filter {
+    margin-bottom: 20px;
+}
+
+.genre-filter label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.genre-filter select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}

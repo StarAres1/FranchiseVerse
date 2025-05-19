@@ -22,6 +22,8 @@ namespace FranchiseVerse.Data
         
         public DbSet<CharacterPerson> characterPerson { get; set; }
         public DbSet<GamePerson> gamePerson { get; set; }
+        public DbSet<RandomGames> RandomGames { get; set; }
+        public DbSet<RandomMovies> RandomMovies { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,6 +52,40 @@ namespace FranchiseVerse.Data
                 .HasOne(gp => gp.Person)
                 .WithMany(p => p.GamePersons)
                 .HasForeignKey(gp => gp.PersonId);
+            
+            // View1
+            modelBuilder.Entity<RandomGames>(entity =>
+            {
+                entity.ToView("random_games");
+                entity.HasNoKey(); // Представления обычно не имеют первичного ключа
+            });
+            
+            // View2
+            modelBuilder.Entity<RandomMovies>(entity =>
+            {
+                entity.ToView("random_movies");
+                entity.HasNoKey(); // Представления обычно не имеют первичного ключа
+            });
+            
+            // Регистрация функции PostgreSQL
+            modelBuilder.HasDbFunction(
+                typeof(AppDbContext).GetMethod(nameof(GetGamesByGenre), new[] { typeof(string) })!,
+                dbFunction => dbFunction.HasName("get_games_by_genre")
+            );
+            
+        }
+        
+        // Метод для вызова функции PostgreSQL
+        public IQueryable<Game> GetGamesByGenre(string genre)
+        {
+            return FromExpression(() => GetGamesByGenre(genre));
+        }
+        
+        public async Task DeleteUserById(uint userId)
+        {
+            await Database.ExecuteSqlInterpolatedAsync(
+                $"SELECT delete_user_by_id({userId})"
+            );
         }
     }
     
