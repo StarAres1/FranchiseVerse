@@ -62,6 +62,22 @@ namespace FranchiseVerse.Controllers
                 return NotFound();
             }
 
+            int? userRating = null;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (!string.IsNullOrEmpty(userId) && uint.TryParse(userId, out var uId))
+                {
+                    userRating = await _context.rate
+                        .Where(r => r.MovieId == id && r.UserId == uId)
+                        .Select(r => r.Rating)
+                        .FirstOrDefaultAsync();
+                }
+            }
+
+            ViewBag.UserRating = userRating;
+
             return View(movie);
         }
 
@@ -70,29 +86,25 @@ namespace FranchiseVerse.Controllers
         [Authorize]
         public async Task<IActionResult> Rate(int id, int rating)
         {
-            Console.WriteLine("----------------------------------");
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-                return Json(new { success = false, message = "Пользователь не найден" });
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !uint.TryParse(userIdClaim, out var userId))
+            {
+                return RedirectToAction("Details", new { id });
+            }
 
             try
             {
-                // Загружаем SQL-запрос из файла
-                var sqlPath = Path.Combine(Directory.GetCurrentDirectory(),"SQL", "RateMovie.sql");
-                var sql = await System.IO.File.ReadAllTextAsync(sqlPath);
-
-                // Вставляем параметры в SQL-запрос
-                var finalSql = string.Format(sql, userId, id, rating);
-
-                // Выполняем SQL-запрос
-                await _context.Database.ExecuteSqlRawAsync(finalSql);
-
-                return Json(new { success = true, message = $"Оценка {rating}/10 сохранена" });
+                await _context.Database.ExecuteSqlInterpolatedAsync(
+                    $"SELECT rate_movie({userId}, {id}, {rating})"
+                );
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Ошибка при сохранении оценки", error = ex.Message });
+                // Логируй ошибку при необходимости
+                Console.WriteLine("Ошибка при сохранении оценки: " + ex.Message);
             }
+
+            return RedirectToAction("Details", new { id });
         }
     }
 }

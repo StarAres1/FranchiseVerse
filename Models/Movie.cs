@@ -12,6 +12,8 @@ namespace FranchiseVerse.Models
         [Required(ErrorMessage = "Название фильма обязательно.")]
         [StringLength(255, ErrorMessage = "Название не должно превышать 255 символов.")]
         public string Title { get; set; }
+        
+        public double OurRate { get; set; }
 
         // Описание фильма
         [DataType(DataType.MultilineText)]

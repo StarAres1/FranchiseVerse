@@ -89,6 +89,13 @@ namespace FranchiseVerse.Data
                 $"SELECT delete_user_by_id({userId})"
             );
         }
+        
+        public async Task RateMovieAsync(uint userId, uint movieId, int rating)
+        {
+            await Database.ExecuteSqlInterpolatedAsync(
+                $"SELECT rate_movie({userId}, {movieId}, {rating})"
+            );
+        }
     }
     
 }
